@@ -2,12 +2,11 @@
 import yo from 'yo-yo'
 
 // Browser
-navigator.getUserMedia =
-     navigator.getUserMedia
-  || navigator.webkitGetUserMedia
+navigator.getUserMedia = navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia
 
 window.AudioContext = window.AudioContext ||
-                      window.webkitAudioContext;
+                      window.webkitAudioContext
 
 const $ = document.querySelector.bind(document)
 
