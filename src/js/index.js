@@ -1,34 +1,41 @@
+navigator.getUserMedia = (
+  navigator.getUserMedia ||
+  navigator.webkitGetUserMedia ||
+  navigator.mozGetUserMedia ||
+  navigator.mediaDevices.getUserMedia ||
+  navigator.msGetUserMedia
+)
+
+if (!navigator.getUserMedia) {
+  throw new Error("getUserMedia not supported on your browser!")
+}
+console.log("getUserMedia supported.");
+
 // NPM
-import yo from 'yo-yo'
+import yo from "yo-yo"
 
-// Browser
-navigator.getUserMedia = navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia
-
-window.AudioContext = window.AudioContext ||
-                      window.webkitAudioContext
-
-const $ = document.querySelector.bind(document)
-
-const getUserMedia = options => new Promise((resolve, reject) =>
-  navigator.getUserMedia(options, resolve, reject))
-
-// View
-// ----------------------------------------------------------------------------
-const mic = yo`<audio id='mic' autoplay></audio>`
-
-yo.update($('#app'), yo`
-  <div>
-    <h1>Verse</h1>
-    ${mic}
-  </div>
-`)
-
-const context = new window.AudioContext()
+const getUserMedia = opts =>
+  new Promise((resolve, reject) =>
+    navigator.getUserMedia(opts, resolve, reject))
 
 getUserMedia({audio: true})
-  .then(context.createMediaStreamSource.bind(context))
-  .then(function (mic) {
-    mic.connect(context.destination)
-  })
-  .catch(console.error.bind(console))
+  .then(stream => new MediaRecorder(stream))
+  .then(recorder => view({recorder}))
+
+
+const view = ({recorder}) =>
+  yo.update(document.getElementById('app'), yo`
+    <div>
+      <button onclick=${function () {
+        recorder.start()
+        console.log(recorder.state)
+        console.log("recorder started")
+      }}>Record</button>
+
+      <button onclick=${function () {
+        recorder.stop()
+        console.log(recorder.state)
+        console.log("recorder stopped")
+      }}>Stop</button>
+    </div>
+  `)

@@ -2,7 +2,13 @@
 
 # About
 
-Audio recording and mixing
+Audio recording and mixing software written with HTML5 technology.
+
+## Browser Support
+
+| [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/firefox.png" alt="Firefox" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox |
+| --------- |
+| last 2 versions
 
 # Development 
 
