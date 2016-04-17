@@ -5,7 +5,7 @@
     "js:optimized": "webpack --progress --colors --optimize-minimize --devtool source-map",
     "js:watch": "webpack --progress --colors --watch",
     "serve": "webpack-dev-server --progress --colors",
-    "lint": "eslint src/js/",
+    "lint": "eslint --fix src/js/",
     "test": "npm run lint",
     "build": "npm run test && npm run js:optimized",
     "deploy": "npm run build && git add -A . && git commit && git push origin gh-pages"

@@ -2,5 +2,14 @@
   "env": {
     "browser": true
   },
-  "extends": ["standard"]
+
+  "globals": {
+      "MediaRecorder": true
+  },
+
+  "extends": ["standard"],
+
+  "rules": {
+    "quotes": [2, "double"]
+  }
 }

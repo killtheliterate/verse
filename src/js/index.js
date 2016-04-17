@@ -9,7 +9,7 @@ navigator.getUserMedia = (
 if (!navigator.getUserMedia) {
   throw new Error("getUserMedia not supported on your browser!")
 }
-console.log("getUserMedia supported.");
+console.log("getUserMedia supported.")
 
 // NPM
 import yo from "yo-yo"
@@ -22,17 +22,16 @@ getUserMedia({audio: true})
   .then(stream => new MediaRecorder(stream))
   .then(recorder => view({recorder}))
 
-
 const view = ({recorder}) =>
-  yo.update(document.getElementById('app'), yo`
+  yo.update(document.getElementById("app"), yo`
     <div>
-      <button onclick=${function () {
+      <button onclick=${ function () {
         recorder.start()
         console.log(recorder.state)
         console.log("recorder started")
       }}>Record</button>
 
-      <button onclick=${function () {
+      <button onclick=${ function () {
         recorder.stop()
         console.log(recorder.state)
         console.log("recorder stopped")
