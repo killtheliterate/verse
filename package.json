@@ -1,7 +1,10 @@
 {
   "main": "src/js/index.js",
   "scripts": {
-    "serve": "http-server",
+    "js": "webpack --progress --colors",
+    "js:optimized": "webpack --progress --colors --optimize-minimize --devtool source-map",
+    "js:watch": "webpack --progress --colors --watch",
+    "serve": "webpack-dev-server --port 3333 --progress --colors",
     "lint": "eslint --fix src/js/",
     "test": "npm run lint",
     "build": "npm run test && npm run js:optimized",
@@ -21,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "systemjs": "^0.19.26",
+    "redux": "^3.4.0",
     "yo-yo": "^1.1.1"
   },
   "system": {
