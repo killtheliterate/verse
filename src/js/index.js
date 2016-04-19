@@ -27,14 +27,26 @@ const app = $('#app')
 const Store = recorder => {
   const defaultState = {
     tracks: [],
+    recording: false,
+    monitoring: false,
   }
+  const stream = context.createMediaStreamSource(recorder.stream)
   const store = createStore(function (state = defaultState, action) {
     switch (action.type) {
+
+      case "MONITOR_MIC":
+        state.monitoring = action.data
+
+        if (state.monitoring) stream.connect(context.destination)
+        else stream.disconnect(context.destination)
+
+        return state
+        break
 
       case "START_RECORDING":
 
         recorder.start()
-        console.log(recorder.state)
+        state.recording = true
 
         return state
         break
@@ -42,7 +54,7 @@ const Store = recorder => {
       case "STOP_RECORDING":
 
         recorder.stop()
-        console.log(recorder.state)
+        state.recording = false
 
         return state
         break
@@ -70,11 +82,28 @@ const viewTrack = track => yo`
   <audio src=${window.URL.createObjectURL(track)} controls></audio>
 `
 
-const view = (dispatch, state) => yo`
-  <div>
-    ${state.tracks.map(viewTrack)}
-  </div>
-`
+const view = (dispatch, state) => {
+  const start = () => dispatch({type: "START_RECORDING"})
+  const stop = () => dispatch({type: "STOP_RECORDING"})
+
+  const monitor = bool => dispatch({type: "MONITOR_MIC", data: bool})
+
+  return yo`
+    <div>
+      <button onclick=${state.recording ? stop : start }>
+        ${state.recording ? 'stop recording' : 'record' }
+      </button>
+
+      <button onclick=${() => monitor(!state.monitoring) }>
+        ${state.monitoring ? 'stop monitoring' : 'monitor' }
+      </button>
+
+      <ul>
+        ${state.tracks.map(viewTrack).map(a => yo`<div>${a}</div>`)}
+      </ul>
+    </div>
+  `
+}
 
 // Start //
 // ----- //
