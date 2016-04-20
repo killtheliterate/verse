@@ -18,17 +18,18 @@ if (!navigator.getUserMedia) {
 console.log("getUserMedia supported.")
 
 import yo from "yo-yo"
-import { createStore } from 'redux'
+import { createStore } from "redux"
 
-window.context = new (window.AudioContext || window.webkitAudioContext)()
+const context = window.context =
+  new (window.AudioContext || window.webkitAudioContext)()
 
-const app = $('#app')
+const app = $("#app")
 
 const Store = recorder => {
   const defaultState = {
     tracks: [],
     recording: false,
-    monitoring: false,
+    monitoring: false
   }
   const stream = context.createMediaStreamSource(recorder.stream)
   const store = createStore(function (state = defaultState, action) {
@@ -41,7 +42,6 @@ const Store = recorder => {
         else stream.disconnect(context.destination)
 
         return state
-        break
 
       case "START_RECORDING":
 
@@ -49,7 +49,6 @@ const Store = recorder => {
         state.recording = true
 
         return state
-        break
 
       case "STOP_RECORDING":
 
@@ -57,7 +56,6 @@ const Store = recorder => {
         state.recording = false
 
         return state
-        break
 
       case "ADD_TRACK":
 
@@ -91,11 +89,11 @@ const view = (dispatch, state) => {
   return yo`
     <div>
       <button onclick=${state.recording ? stop : start }>
-        ${state.recording ? 'stop recording' : 'record' }
+        ${state.recording ? "stop recording" : "record" }
       </button>
 
       <button onclick=${() => monitor(!state.monitoring) }>
-        ${state.monitoring ? 'stop monitoring' : 'monitor' }
+        ${state.monitoring ? "stop monitoring" : "monitor" }
       </button>
 
       <ul>
@@ -115,7 +113,7 @@ getUserMedia({audio: true})
     const dispatch = store.dispatch.bind(store)
 
     store.subscribe(() => {
-      yo.update(app,  view(dispatch, store.getState()))
+      yo.update(app, view(dispatch, store.getState()))
     })
-    yo.update(app,  view(dispatch, store.getState()))
+    yo.update(app, view(dispatch, store.getState()))
   })
