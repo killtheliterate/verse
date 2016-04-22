@@ -10,11 +10,10 @@ const defaultState = {
 export const reducer = (context, recorder) => {
   const stream = context.createMediaStreamSource(recorder.stream)
 
-  // This kinda sucks but it's okay I guess. This is how we get new
-  // recordings from the recorder.
-  recorder.ondataavailable = function ({data}) {
+  // This is how we get new recordings from the recorder.
+  recorder.ondataavailable.addListener(function ({data}) {
     store.dispatch({type: "ADD_TRACK", data})
-  }
+  })
 
   return function (state = defaultState, action) {
     switch (action.type) {
