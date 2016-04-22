@@ -1,35 +1,3 @@
-// View //
-// ---- //
-
-import yo from "yo-yo"
-
-const viewTrack = track => yo`
-  <audio src=${window.URL.createObjectURL(track)} loop controls></audio>
-`
-
-export const view = (dispatch, state) => {
-  const start = () => dispatch({type: "START_RECORDING"})
-  const stop = () => dispatch({type: "STOP_RECORDING"})
-
-  const monitor = bool => dispatch({type: "MONITOR_MIC", data: bool})
-
-  return yo`
-    <div>
-      <button onclick=${state.recording ? stop : start }>
-        ${state.recording ? "stop recording" : "record" }
-      </button>
-
-      <button onclick=${() => monitor(!state.monitoring) }>
-        ${state.monitoring ? "stop monitoring" : "monitor" }
-      </button>
-
-      <ul>
-        ${state.tracks.map(viewTrack)}
-      </ul>
-    </div>
-  `
-}
-
 // reducer //
 // ------- //
 
@@ -84,4 +52,36 @@ export const reducer = (context, recorder) => {
         return state
     }
   }
+}
+
+// View //
+// ---- //
+
+import yo from "yo-yo"
+
+const viewTrack = track => yo`
+  <audio src=${window.URL.createObjectURL(track)} loop controls></audio>
+`
+
+export const view = (dispatch, state) => {
+  const start = () => dispatch({type: "START_RECORDING"})
+  const stop = () => dispatch({type: "STOP_RECORDING"})
+
+  const monitor = bool => dispatch({type: "MONITOR_MIC", data: bool})
+
+  return yo`
+    <div>
+      <button onclick=${state.recording ? stop : start }>
+        ${state.recording ? "stop recording" : "record" }
+      </button>
+
+      <button onclick=${() => monitor(!state.monitoring) }>
+        ${state.monitoring ? "stop monitoring" : "monitor" }
+      </button>
+
+      <ul>
+        ${state.tracks.map(viewTrack)}
+      </ul>
+    </div>
+  `
 }
