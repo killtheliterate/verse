@@ -1,13 +1,7 @@
-import yo from "yo-yo"
-
-const defaultState = {
-  tracks: [],
-  recording: false,
-  monitoring: false
-}
-
 // View //
 // ---- //
+
+import yo from "yo-yo"
 
 const viewTrack = track => yo`
   <audio src=${window.URL.createObjectURL(track)} loop controls></audio>
@@ -38,6 +32,12 @@ export const view = (dispatch, state) => {
 
 // reducer //
 // ------- //
+
+const defaultState = {
+  tracks: [],
+  recording: false,
+  monitoring: false
+}
 
 export const reducer = (context, recorder) => {
   const stream = context.createMediaStreamSource(recorder.stream)
