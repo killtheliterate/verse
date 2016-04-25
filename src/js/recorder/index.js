@@ -59,7 +59,7 @@ export const reducer = (context, recorder) => {
 import yo from "yo-yo"
 
 const viewTrack = track => yo`
-  <audio src=${window.URL.createObjectURL(track)} loop controls></audio>
+  <li><audio src=${window.URL.createObjectURL(track)} loop controls></audio></li>
 `
 
 export const view = (dispatch, state) => {
