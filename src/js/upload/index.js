@@ -37,7 +37,7 @@ export const view = (dispatch, {upload}) => yo`
            onchange=${function () {
              dispatch({type: 'verse/upload/files', payload: this.files[0]})
            }}
-    ></input>
+    />
 
     <ul>
       ${upload.files.map(viewFile)}
