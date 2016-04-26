@@ -19,7 +19,7 @@ const context = new (window.AudioContext || window.webkitAudioContext)()
 // ----- //
 
 import yo from "yo-yo"
-import { createStore } from "redux"
+import { createStore, combineReducers } from "redux"
 
 import * as recorder from "./recorder"
 
@@ -30,7 +30,9 @@ getUserMedia({audio: true})
   .then(stream => new MediaRecorder(stream))
 
   // Store
-  .then(rec => createStore(recorder.reducer(context, rec)))
+  .then(rec => createStore(combineReducers({
+    recorder: recorder.reducer(context, rec)
+  })))
 
   // OUTPUTS
   .then(function (store) {

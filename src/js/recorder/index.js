@@ -11,41 +11,43 @@ export const reducer = (context, recorder) => {
   const stream = context.createMediaStreamSource(recorder.stream)
 
   // This is how we get new recordings from the recorder.
-  recorder.ondataavailable.addListener(function ({data}) {
-    store.dispatch({type: "ADD_TRACK", data})
-  })
+  recorder.ondataavailable = function ({data}) {
+    store.dispatch({type: "verse/recorder/addTrack", data})
+  }
 
   return function (state = defaultState, action) {
     switch (action.type) {
 
-      case "MONITOR_MIC":
+      case "verse/recorder/monitor":
 
-        state.monitoring = action.data
-
-        if (state.monitoring) stream.connect(context.destination)
+        if (action.data) stream.connect(context.destination)
         else stream.disconnect(context.destination)
 
-        return state
+        return Object.assign({}, state, {
+          monitoring: action.data
+        })
 
-      case "START_RECORDING":
+      case "verse/recorder/start":
 
         recorder.start()
-        state.recording = true
 
-        return state
+        return Object.assign({}, state, {
+          recording: true
+        })
 
-      case "STOP_RECORDING":
+      case "verse/recorder/stop":
 
         recorder.stop()
-        state.recording = false
 
-        return state
+        return Object.assign({}, state, {
+          recording: false
+        })
 
-      case "ADD_TRACK":
+      case "verse/recorder/addTrack":
 
-        state.tracks.push(action.data)
-
-        return state
+        return Object.assign({}, state, {
+          tracks: state.tracks.concat([action.data])
+        })
 
       default:
         return state
@@ -62,24 +64,24 @@ const viewTrack = track => yo`
   <li><audio src=${window.URL.createObjectURL(track)} loop controls></audio></li>
 `
 
-export const view = (dispatch, state) => {
-  const start = () => dispatch({type: "START_RECORDING"})
-  const stop = () => dispatch({type: "STOP_RECORDING"})
+export const view = (dispatch, {recorder}) => {
+  const start = () => dispatch({type: "verse/recorder/start"})
+  const stop = () => dispatch({type: "verse/recorder/stop"})
 
-  const monitor = bool => dispatch({type: "MONITOR_MIC", data: bool})
+  const monitor = bool => dispatch({type: "verse/recorder/monitor", data: bool})
 
   return yo`
     <div>
-      <button onclick=${state.recording ? stop : start }>
-        ${state.recording ? "stop recording" : "record" }
+      <button onclick=${recorder.recording ? stop : start }>
+        ${recorder.recording ? "stop recording" : "record" }
       </button>
 
-      <button onclick=${() => monitor(!state.monitoring) }>
-        ${state.monitoring ? "stop monitoring" : "monitor" }
+      <button onclick=${() => monitor(!recorder.monitoring) }>
+        ${recorder.monitoring ? "stop monitoring" : "monitor" }
       </button>
 
       <ul>
-        ${state.tracks.map(viewTrack)}
+        ${recorder.tracks.map(viewTrack)}
       </ul>
     </div>
   `
