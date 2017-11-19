@@ -1,5 +1,7 @@
 # verse 
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/killtheliterate/verse.svg)](https://greenkeeper.io/)
+
 # About
 
 Audio recording and mixing software written with HTML5 technology.
